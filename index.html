@@ -330,31 +330,42 @@
         /* Responsive */
         @media screen and (max-width: 1024px) {
 
-            /* Masquer la vidéo */
-            .video-wrapper,
-            .video-overlay,
-            .video-seekbar {
-                display: none !important;
-            }
-
             html,
             body {
                 overflow-x: hidden;
             }
 
+            .video-wrapper {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: 1;
+            }
+
+            .video-overlay,
+            .video-seekbar {
+                z-index: 2;
+            }
+
             .formulaire-container {
+                position: relative;
                 flex-direction: column;
                 width: 100%;
-                height: 100dvh;
-                overflow-x: hidden;
-    						overflow-y: auto;
+                height: 100vh;
+                overflow: hidden;
             }
 
             .formulaire-questions {
+                position: absolute;
+                bottom: 0;
                 width: 100%;
-                height: 100dvh;
+                height: 55vh;
                 padding: 40px 20px;
-                overflow-y: auto;	
+                overflow-y: auto;
+                background-color: var(--bleu-electrique);
+                z-index: 3;
             }
 
             .step-title {
@@ -665,7 +676,6 @@
                     firstPlay: firstPlayFlags[index],
                     firstPlayFlags: [...firstPlayFlags],
                 });
-                if (!isDesktop) return;
 
                 // RESET
                 document.querySelectorAll('.video').forEach(v => {
@@ -728,15 +738,13 @@
 
 
             // 3) Clique unique sur toute la zone vidéo (wrapper) pour play/pause
-            if (isDesktop) {
-                // Clic direct sur la vidéo (déjà géré par setupVideo)
-                // Clic sur l'overlay
-                playButton.addEventListener("click", (e) => {
-                    e.stopPropagation(); // évite la propagation vers des parents
-                    const vid = document.querySelector(".video.active");
-                    if (vid) handleVideoClick(vid);
-                });
-            }
+            // Clic direct sur la vidéo (déjà géré par setupVideo)
+            // Clic sur l'overlay
+            playButton.addEventListener("click", (e) => {
+                e.stopPropagation(); // évite la propagation vers des parents
+                const vid = document.querySelector(".video.active");
+                if (vid) handleVideoClick(vid);
+            });
 
             // 4) Navigation des étapes
             function focusFirst() {
@@ -836,7 +844,7 @@ currentStep = nextIdx;
     nextEl.classList.add("fade-in");
     setTimeout(() => nextEl.classList.remove("fade-in"), 400);
 
-    if (isDesktop) setupVideo(currentStep);
+    setupVideo(currentStep);
     focusFirst();
     updateButton();
   }, 400);
@@ -846,7 +854,7 @@ currentStep = nextIdx;
 
             // === Initialisation ===
             loadVideos();
-            if (isDesktop) setupVideo(0);
+            setupVideo(0);
             wrapper.addEventListener('click', (e) => {
                 const vid = document.querySelector('.video.active');
                 if (!vid) return;
