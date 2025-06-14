@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulaire Nexmod – Plein écran</title>
+    <style>
+        /* Couleurs Nexmod */
+         :root {
+            --bleu-nuit: #130c42;
+            --bleu-electrique: white;
+            --rose-violet: #e149ed;
+            --blanc: #1b1b1b;
+        }
+
+        /* Supprime le scroll de page, le formulaire est en plein écran */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: "Poppins", sans-serif;
+        }
+
+        /* Conteneur principal en plein écran */
+        .formulaire-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            z-index: 9999;
+            background-color: var(--bleu-nuit);
+        }
+
+        /* Partie vidéo */
+        .video-wrapper {
+            width: 50%;
+            height: 100%;
+            position: relative;
+            background-color: #000;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .video-seekbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .video-seekbar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--rose-violet);
+            transition: width 0.1s linear;
+        }
+
+        .video-wrapper .video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            cursor: pointer;
+            pointer-events: none;
+        }
+
+        .video-wrapper .video.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            z-index: 2;
+            transition: background-color 0.3s ease;
+        }
+
+
+        .video-overlay img {
+            width: 48px;
+            height: 48px;
+        }
+
+        .video-overlay:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Partie formulaire */
+        .formulaire-questions {
+            flex: 1;
+            background-color: var(--bleu-electrique);
+            position: relative;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .step {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .step-title {
+            width: 95%;
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--blanc);
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        /* Agrandissement spécifique pour certaines étapes */
+        #step-3 textarea,
+        #step-5 textarea,
+        #step-7 textarea,
+        #step-8 textarea,
+        #step-9 textarea,
+        #step-10 textarea {
+            min-height: 200px;
+        }
+
+        .step textarea,
+        .step input[type="number"] {
+            width: 95%;
+            padding: 20px;
+            font-size: 24px;
+            border: none;
+            background: #f8f8f8;
+            outline: none;
+            color: --blanc;
+            border-radius: 8px;
+            margin-bottom: 60px;
+            resize: none;
+        }
+
+        .step textarea::placeholder,
+        .step input::placeholder {
+            color: #808080;
+            font-style: italic;
+            font-size: 22px;
+        }
+
+        .input-field {
+            width: 95%;
+            padding: 20px;
+            font-size: 24px;
+            border: none;
+            background: #f8f8f8;
+            outline: none;
+            color: --blanc;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            font-size: 22px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 95%;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-group label {
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 20px;
+            color: --blanc;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-group label:has(input[type="checkbox"]:checked) {
+            background-color: #f8f8f8;
+            border-color: var(--rose-violet);
+            color: var(--blanc);
+        }
+
+        .checkbox-group label:hover {
+            border-color: var(--rose-violet);
+        }
+
+        /* Bouton suivant */
+        .form-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border: none;
+            border-radius: 999px;
+            background-color: var(--bleu-nuit);
+            cursor: not-allowed;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .form-btn.active {
+            background-color: var(--rose-violet);
+            cursor: pointer;
+        }
+
+        .form-btn.active:hover {
+            transform: scale(1.1);
+        }
+
+        .arrow-icon {
+            width: 26px;
+            height: 26px;
+            filter: brightness(0) invert(1);
+        }
+
+        .form-btn.active .arrow-icon {
+            filter: none;
+        }
+
+        /* Animations fade */
+        .fade-out {
+            animation: fadeOut 0.4s forwards;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Message final */
+        .message-final-text {
+            color: white;
+            font-size: 22px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            width: 95%;
+            max-width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        /* Progress bar container */
+        .progress-container-devis {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            z-index: 5;
+        }
+
+        .progress-bar-devis {
+            height: 100%;
+            width: 0%;
+            background-color: var(--rose-violet);
+            transition: width 0.4s ease;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 1024px) {
+
+            /* Masquer la vidéo */
+            .video-wrapper,
+            .video-overlay,
+            .video-seekbar {
+                display: none !important;
+            }
+
+            html,
+            body {
+                overflow-x: hidden;
+            }
+
+            .formulaire-container {
+                flex-direction: column;
+                width: 100%;
+                height: 100dvh;
+                overflow-x: hidden;
+    						overflow-y: auto;
+            }
+
+            .formulaire-questions {
+                width: 100%;
+                height: 100dvh;
+                padding: 40px 20px;
+                overflow-y: auto;	
+            }
+
+            .step-title {
+                font-size: 22px;
+            }
+
+            .step textarea,
+            .step input,
+            .input-field {
+                font-size: 18px;
+                padding: 14px;
+            }
+
+            .step textarea::placeholder,
+            .step input::placeholder,
+            .input-field::placeholder {
+                font-size: 16px;
+            }
+
+            .form-btn {
+            		position: fixed;
+                width: 52px;
+                height: 52px;
+                right: 16px;
+                bottom: 16px;
+                bottom: calc(32px + env(safe-area-inset-bottom));
+                z-index: 1000;
+            }
+
+            .arrow-icon {
+                width: 22px;
+                height: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Conteneur principal du formulaire -->
+    <div id="form-screen" class="formulaire-container">
+        <!-- Barre de progression -->
+        <div class="progress-container-devis">
+            <div class="progress-bar-devis" id="progress-bar-devis"></div>
+        </div>
+
+        <!-- Partie vidéo -->
+        <div class="video-wrapper">
+            <div class="video-overlay" id="play-button">
+                <img src="https://cdn.prod.website-files.com/67d404ef725b4244f4b32ad1/6804f356d8d2a2893d47373c_play-icon.svg"
+                    alt="Lire la vidéo" />
+            </div>
+            <div class="video-seekbar" id="video-seekbar">
+                <div class="video-seekbar-fill" id="video-seekbar-fill"></div>
+            </div>
+        </div>
+
+        <!-- Formulaire -->
+        <form class="formulaire-questions" id="mon-formulaire"
+            action="https://hook.eu1.make.com/d41zmgpinni4novk1wrtqkpmgufbxxtg" method="POST">
+            <!-- Étapes (gardées telles quelles) -->
+            <!-- Étape 1 -->
+            <!-- Formulaire HTML Nexmod complet avec toutes les étapes à jour -->
+<!-- Chaque étape correspond à une seule question pour une expérience fluide -->
+
+<!-- Étape 1 -->
+<div class="step" id="step-1">
+  <h2 class="step-title">Quel est ton prénom et ton nom ?</h2>
+  <input type="text" name="nom_prenom" class="input-field" placeholder="Prénom & nom">
+</div>
+
+<!-- Étape 2 -->
+<div class="step" id="step-2" style="display: none;">
+  <h2 class="step-title">Quelle est ton adresse e-mail ?</h2>
+  <input type="email" name="email" class="input-field" placeholder="Ton e-mail">
+</div>
+
+<!-- Étape 3 -->
+<div class="step" id="step-3" style="display: none;">
+  <h2 class="step-title">Quel est le nom de ton entreprise ?</h2>
+  <input type="text" name="nom_entreprise" class="input-field" placeholder="Nom de l'entreprise">
+</div>
+
+<!-- Étape 4 -->
+<div class="step" id="step-4" style="display: none;">
+  <h2 class="step-title">Ton entreprise a-t-elle un site web ?</h2>
+  <input type="url" name="site_entreprise" class="input-field" placeholder="https://www.ton-site.com (facultatif)">
+</div>
+
+<!-- Étape 5 -->
+<div class="step" id="step-5" style="display: none;">
+  <h2 class="step-title">Que fait ton entreprise ?</h2>
+  <textarea name="activite_entreprise" class="input-field" placeholder="Décris ton activité en une phrase"></textarea>
+</div>
+
+<!-- Étape 6 -->
+<div class="step" id="step-6" style="display: none;">
+  <h2 class="step-title">Quel est l’objectif de ta demande ?</h2>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="objectif" value="Modèle 3D pour e-commerce">Modèle 3D pour e-commerce</label>
+    <label><input type="checkbox" name="objectif" value="Visuels produit">Visuels pour produit</label>
+    <label><input type="checkbox" name="objectif" value="Animation produit">Animation produit</label>
+    <label><input type="checkbox" name="objectif" value="Démonstration technique">Démonstration technique</label>
+    <label><input type="checkbox" name="objectif" value="Réalité augmentée">Réalité augmentée</label>
+  </div>
+</div>
+
+<!-- Étape 7 -->
+<div class="step" id="step-7" style="display: none;">
+  <h2 class="step-title">À quel stade en es-tu ?</h2>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="stade" value="Idée générale">Idée générale</label>
+    <label><input type="checkbox" name="stade" value="En développement">Produit en développement</label>
+    <label><input type="checkbox" name="stade" value="Prêt à modéliser">Produit prêt à modéliser</label>
+  </div>
+</div>
+
+<!-- Étape 8 -->
+<div class="step" id="step-8" style="display: none;">
+  <h2 class="step-title">Quel est le produit à modéliser ?</h2>
+  <textarea name="produit_description" class="input-field" placeholder="Nom, usage, dimensions, matières..."></textarea>
+</div>
+
+<!-- Étape 9 -->
+<div class="step" id="step-9" style="display: none;">
+  <h2 class="step-title">Souhaites-tu des variantes ? (couleurs, textures, tailles...)</h2>
+  <textarea name="variantes" class="input-field" placeholder="Ex : 3 coloris, 2 textures... ou indique 'non'"></textarea>
+</div>
+
+<!-- Étape 10 -->
+<div class="step" id="step-10" style="display: none;">
+  <h2 class="step-title">As-tu des éléments à nous transmettre pour modéliser ton produit ?</h2>
+  <textarea name="elements_a_transmettre" class="input-field" placeholder="Ex : croquis côté, fichier 3D, charte graphique, dossier Drive, etc."></textarea>
+  <input type="hidden" role="uploadcare-uploader" name="assets_model" data-multiple data-crop="free" data-images-only />
+</div>
+
+<!-- Étape 11 -->
+<div class="step" id="step-11" style="display: none;">
+  <h2 class="step-title">Souhaites-tu une animation ?</h2>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="animation" value="Non">Non</label>
+    <label><input type="checkbox" name="animation" value="Oui">Oui</label>
+  </div>
+</div>
+
+<!-- Étape 12 -->
+<div class="step" id="step-12" style="display: none;">
+  <h2 class="step-title">Si oui, quelle durée doit-elle faire ?</h2>
+  <input type="text" name="duree_animation" class="input-field" placeholder="Ex : 10 sec, 30 sec, etc.">
+</div>
+
+<!-- Étape 13 -->
+<div class="step" id="step-13" style="display: none;">
+  <h2 class="step-title">Souhaites-tu ajouter du son ou une musique ?</h2>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="animation_son" value="Non">Non</label>
+    <label><input type="checkbox" name="animation_son" value="Oui, j’ai une piste">Oui, j’ai une piste</label>
+    <label><input type="checkbox" name="animation_son" value="Oui, je veux que Nexmod choisisse">Oui, je veux que Nexmod choisisse</label>
+  </div>
+  <input type="hidden" role="uploadcare-uploader" name="fichier_animation" data-multiple data-crop="free" />
+</div>
+
+<!-- Étape 14 -->
+<div class="step" id="step-14" style="display: none;">
+  <h2 class="step-title">Souhaites-tu que Nexmod intègre le modèle sur ton site ?</h2>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="integration" value="Non">Non, je souhaite uniquement les fichiers</label>
+    <label><input type="checkbox" name="integration" value="Oui">Oui, je veux que Nexmod intègre le modèle (ModelViewer, AR)</label>
+  </div>
+</div>
+
+<!-- Étape 15 -->
+<div class="step" id="step-15" style="display: none;">
+  <h2 class="step-title">As-tu une deadline ?</h2>
+  <input type="text" name="deadline" class="input-field" placeholder="Date ou délai souhaité">
+</div>
+
+<!-- Étape 16 -->
+<div class="step" id="step-16" style="display: none;">
+  <h2 class="step-title">As-tu un budget estimé ?</h2>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="budget" value="<500€">Moins de 500 €</label>
+    <label><input type="checkbox" name="budget" value="500–1000€">500 – 1000 €</label>
+    <label><input type="checkbox" name="budget" value="1000–2000€">1000 – 2000 €</label>
+    <label><input type="checkbox" name="budget" value="2000–5000€">2000 – 5000 €</label>
+    <label><input type="checkbox" name="budget" value=">5000€+">Plus de 5000 €</label>
+  </div>
+</div>
+
+<!-- Étape 17 -->
+<div class="step" id="step-17" style="display: none;">
+  <h2 class="step-title">Comment as-tu connu Nexmod ?</h2>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="origine" value="Google">Google</label>
+    <label><input type="checkbox" name="origine" value="Réseaux sociaux">Réseaux sociaux</label>
+    <label><input type="checkbox" name="origine" value="Recommandation">Recommandation</label>
+    <label><input type="checkbox" name="origine" value="Autre">Autre</label>
+  </div>
+</div>
+
+<!-- Étape 18 -->
+<div class="step message-final" id="step-18" style="display: none;">
+  <p class="message-final-text">
+    Merci <strong><span id="prenom-utilisateur">à toi</span></strong> 🙏<br>
+    Nous reviendrons vers toi sous 24h avec une proposition personnalisée.
+  </p>
+</div>
+
+            <!-- Les autres étapes (2 à 14) restent identiques : copie/colle celles de ton code original -->
+            <!-- ... -->
+            <button type="button" class="form-btn" onclick="nextStep(); return false;">
+                <img src="https://cdn.prod.website-files.com/67d404ef725b4244f4b32ad1/6804f359eab9bf4963c33c15_1646214.svg"
+                    alt="Flèche suivante" class="arrow-icon" />
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Variables globales
+            const isDesktop = window.innerWidth > 1024;
+            const wrapper = document.querySelector(".video-wrapper");
+            const playButton = document.getElementById("play-button");
+            const steps = document.querySelectorAll(".step");
+            const nextButton = document.querySelector(".form-btn");
+            const progressBar = document.getElementById("progress-bar-devis");
+            let currentStep = 0;
+            let firstPlayFlags = []; // pour chaque vidéo, on rewind+unmute qu’une seule fois
+
+            function bindClickHandlerTo(video) {
+                video.addEventListener('click', (event) => {
+                    event.stopPropagation();          // ← empêche le wrapper de recevoir le même clic
+                    handleVideoClick(video);
+                });
+            }
+            function handleVideoClick(vid) {
+                const vids = document.querySelectorAll(".video");
+                const index = Array.from(vids).indexOf(vid);
+                const isFirstPlay = firstPlayFlags[index];
+
+                console.log(`🖱️ Click sur la vidéo ${index}`);
+                console.log(`   - firstPlayFlags[${index}] =`, isFirstPlay);
+                console.log(`   - vid.paused =`, vid.paused);
+                console.log(`   - vid.ended =`, vid.ended);
+
+                if (isFirstPlay) {
+                    console.log("   ▶️ Première lecture (firstPlay = true)");
+                    vid.currentTime = 0;
+                    vid.muted = false;
+                    firstPlayFlags[index] = false;
+                    playButton.style.display = 'none';
+                    vid.play();
+                    return;
+                }
+
+                if (vid.ended) {
+                    console.log("   ⛔ La vidéo est terminée → on ne fait rien.");
+                    return;
+                }
+
+                if (vid.paused) {
+                    console.log("   ▶️ Reprise de la lecture");
+                    vid.play();
+                    playButton.style.display = 'none';
+                } else {
+                    console.log("   ⏸ Mise en pause");
+                    vid.pause();
+                    playButton.style.display = 'flex';
+                }
+            }
+
+
+
+
+
+            // 1) Crée les <video> sans autoplay
+            function loadVideos() {
+                const sources = [
+                    "1566080964_video copie.mp4",
+                    "1575020624_video copie.mp4",
+                    "Download.mp4",
+                    "Sans titre copie.mov",
+                    // ajoute ici toutes tes vidéos
+                ];
+                
+                
+                
+                sources.forEach((src, index) => {
+                    const video = document.createElement("video");
+                    video.classList.add("video");
+
+                    const source = document.createElement("source");
+                    source.src = src;
+                    source.type = "video/mp4";
+                    video.appendChild(source);
+
+                    wrapper.appendChild(video);
+
+                    // Très important : on initialise chaque flag dans le bon ordre
+                    firstPlayFlags[index] = (index === 0);
+                });
+                console.log("🚀 Vidéos chargées :", firstPlayFlags);
+            }
+
+
+            // 2) Active la vidéo d’index donné et lui applique loop/muted selon index
+            function setupVideo(index) {
+                console.log(`🎥 Activation de la vidéo ${index}`, {
+                    firstPlay: firstPlayFlags[index],
+                    firstPlayFlags: [...firstPlayFlags],
+                });
+                if (!isDesktop) return;
+
+                // RESET
+                document.querySelectorAll('.video').forEach(v => {
+                    v.pause();
+                    v.classList.remove('active');
+                    v.loop = false;
+                    v.muted = false;
+                    v.onclick = null;
+                    v.onended = null;
+                });
+
+                const vid = document.querySelectorAll('.video')[index];
+
+                if (!vid) return;
+                vid.classList.add('active');
+
+                // Spécial première vidéo
+                firstPlay = (index === 0);
+
+                if (index === 0) {
+                    vid.loop = true;
+                    vid.muted = true;
+                    playButton.style.display = 'flex';
+                } else {
+                    // Vidéos suivantes
+                    vid.loop = false;
+                    vid.muted = false;
+                    playButton.style.display = 'none';
+
+                    // Quand elles se terminent, on laisse l’overlay visible,
+                    // mais **on ne relance pas** au clic si ended===true** 
+                    vid.onended = () => {
+                        playButton.style.display = 'flex';
+                    };
+                }
+
+                vid.play();
+                const seekbarFill = document.getElementById("video-seekbar-fill");
+                vid.addEventListener("timeupdate", () => {
+                    if (vid.duration) {
+                        const progress = (vid.currentTime / vid.duration) * 100;
+                        seekbarFill.style.width = progress + "%";
+                    }
+                });
+                const seekbar = document.getElementById("video-seekbar");
+                seekbar.onclick = (e) => {
+                    const rect = seekbar.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const pct = x / rect.width;
+                    if (vid.duration) {
+                        vid.currentTime = pct * vid.duration;
+                        seekbarFill.style.width = (pct * 100) + "%";
+                    }
+                };
+
+                bindClickHandlerTo(vid);
+            }
+
+
+
+
+            // 3) Clique unique sur toute la zone vidéo (wrapper) pour play/pause
+            if (isDesktop) {
+                // Clic direct sur la vidéo (déjà géré par setupVideo)
+                // Clic sur l'overlay
+                playButton.addEventListener("click", (e) => {
+                    e.stopPropagation(); // évite la propagation vers des parents
+                    const vid = document.querySelector(".video.active");
+                    if (vid) handleVideoClick(vid);
+                });
+            }
+
+            // 4) Navigation des étapes
+            function focusFirst() {
+                const first = steps[currentStep].querySelector(
+                    "textarea, input[type='text'], input[type='email'], input[type='url'], input[type='number']"
+                );
+                if (first) first.focus({ preventScroll: true });
+            }
+            function updateButton() {
+                const inputs = steps[currentStep].querySelectorAll("textarea, input");
+                let valid = false;
+                inputs.forEach(i => {
+                    if (i.type === "checkbox" && i.checked) valid = true;
+                    else if (["text", "email", "url", "number"].includes(i.type) && i.value.trim() !== "") valid = true;
+                    else if (i.tagName === "TEXTAREA" && i.value.trim() !== "") valid = true;
+                });
+                nextButton.classList.toggle("active", valid);
+            }
+            function attachInputListeners() {
+                steps.forEach(step => {
+                    step.querySelectorAll("textarea, input").forEach(field => {
+                        field.addEventListener("input", updateButton);
+                        field.addEventListener("change", updateButton);
+                    });
+                });
+            }
+            let skipAnimationSteps = false;
+
+function getCheckboxValue(stepElement, name) {
+  const inputs = stepElement.querySelectorAll(`input[name='${name}']`);
+  for (const input of inputs) {
+    if (input.checked) return input.value;
+  }
+  return null;
+}
+
+
+     window.nextStep = () => {
+  // 1. Ne rien faire si le bouton n'est pas actif
+  if (!nextButton.classList.contains("active")) return;
+
+  const currStepEl = steps[currentStep];
+  currStepEl.classList.add("fade-out");
+
+  setTimeout(() => {
+    // 2. Cacher la step courante
+    currStepEl.style.display = "none";
+    currStepEl.classList.remove("fade-out");
+
+    // 3. Si on vient de l'étape 11 (index 10), gérer le skip des 12 & 13
+    if (currentStep === 10) {
+      const animValue = getCheckboxValue(currStepEl, "animation");
+      skipAnimationSteps = (animValue === "Non");
+    }
+
+    // 4. Calculer l'index de la prochaine étape
+   // 4. Calculer l'index de la prochaine étape
+let nextIdx = currentStep + 1;
+while (
+  skipAnimationSteps &&
+  (nextIdx === 11 || nextIdx === 12) &&
+  nextIdx < steps.length
+) {
+  nextIdx++;
+}
+currentStep = nextIdx;
+
+
+    // 5. Mettre à jour la barre de progression
+    const pct = Math.min((currentStep / (steps.length - 1)) * 100, 100);
+    progressBar.style.width = pct + "%";
+
+    // 6. Si on arrive au dernier index (= étape 18 / message final)
+    if (currentStep === steps.length - 1) {
+      console.log("🚀 Étape 17 atteinte → soumission + affichage étape 18");
+
+      // • Soumettre le formulaire
+      const form = document.getElementById("mon-formulaire");
+      if (form) form.submit();
+
+      // • Afficher le message final
+      setTimeout(() => {
+        steps.forEach(s => (s.style.display = "none"));
+        const finalStep = document.getElementById("step-18");
+        if (finalStep) finalStep.style.display = "flex";
+
+        // • Cacher le bouton
+        nextButton.style.display = "none";
+      }, 300);
+
+      return; // on sort, pas de navigation classique
+    }
+
+    // 7. Sinon, afficher la step suivante normalement
+    const nextEl = steps[currentStep];
+    nextEl.style.display = "flex";
+    nextEl.classList.add("fade-in");
+    setTimeout(() => nextEl.classList.remove("fade-in"), 400);
+
+    if (isDesktop) setupVideo(currentStep);
+    focusFirst();
+    updateButton();
+  }, 400);
+};
+
+
+
+            // === Initialisation ===
+            loadVideos();
+            if (isDesktop) setupVideo(0);
+            wrapper.addEventListener('click', (e) => {
+                const vid = document.querySelector('.video.active');
+                if (!vid) return;
+
+                const vids = document.querySelectorAll('.video');
+                const index = Array.from(vids).indexOf(vid);
+
+                // Ne rien faire si clic sur bouton play (il a son propre handler)
+                if (e.target.closest('#play-button')) {
+                    e.stopPropagation();
+                    return;
+                }
+
+                // ❗️ Ne rien faire si clic sur la seekbar
+                if (e.target.closest('#video-seekbar')) {
+                    e.stopPropagation();
+                    return;
+                }
+
+                // Si première vidéo : on veut autoriser clic n'importe où (même sur .video)
+                if (index === 0) {
+                    handleVideoClick(vid);
+                    return;
+                }
+
+                // Pour les vidéos suivantes : ignorer le clic direct sur .video (géré par leur .onclick)
+                if (e.target.classList.contains('video')) return;
+
+                // Sinon (clic sur wrapper en dehors de la vidéo) → toggle pause/lecture
+                handleVideoClick(vid);
+            });
+
+
+
+            // (la suite : attachInputListeners(), updateButton(), focusFirst()…)
+            attachInputListeners();
+            updateButton();
+            focusFirst();
+        });
+
+    </script>
+
+</body>
+
+</html>
