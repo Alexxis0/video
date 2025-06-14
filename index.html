@@ -148,44 +148,45 @@
         }
 
         .step textarea,
+        .step input[type="text"],
+        .step input[type="email"],
+        .step input[type="url"],
         .step input[type="number"] {
             width: 95%;
             padding: 20px;
             font-size: 24px;
             border: none;
-            background: #f8f8f8;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(6px);
             outline: none;
-            color: --blanc;
-            border-radius: 8px;
+            color: var(--blanc);
+            border-radius: 12px;
             overflow-y: hidden;
             min-height: 60px;
             margin-bottom: 60px;
             resize: none;
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease, min-height 0.2s ease;
+        }
+
+        .step textarea:focus,
+        .step input[type="text"]:focus,
+        .step input[type="email"]:focus,
+        .step input[type="url"]:focus,
+        .step input[type="number"]:focus {
+            background: #fff;
+            backdrop-filter: none;
+            min-height: 80px;
         }
 
         .step textarea::placeholder,
         .step input::placeholder {
-            color: #808080;
+            color: #888;
             font-style: italic;
             font-size: 22px;
         }
 
         .input-field {
-            width: 95%;
-            padding: 20px;
-            font-size: 24px;
-            border: none;
-            background: #f8f8f8;
-            outline: none;
-            color: --blanc;
-            border-radius: 8px;
             margin-bottom: 40px;
-        }
-
-        .input-field::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-            font-style: italic;
-            font-size: 22px;
         }
 
         .checkbox-group {
@@ -229,33 +230,41 @@
             height: 60px;
             border: none;
             border-radius: 999px;
-            background-color: var(--bleu-nuit);
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(6px);
+            color: #666;
             cursor: not-allowed;
             transition: transform 0.3s ease, background-color 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
+            padding: 0 18px;
+            gap: 4px;
         }
 
         .form-btn.active {
-            background-color: var(--rose-violet);
+            background-color: rgba(255, 255, 255, 0.8);
             cursor: pointer;
         }
 
         .form-btn.active:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
-        .arrow-icon {
-            width: 26px;
-            height: 26px;
-            filter: brightness(0) invert(1);
+        .arrow-icon,
+        .check-icon {
+            font-size: 24px;
+            pointer-events: none;
         }
 
-        .form-btn.active .arrow-icon {
-            filter: none;
+        .check-icon {
+            display: none;
+            color: #0a84ff;
+        }
+
+        .form-btn.active .check-icon {
+            display: inline;
         }
 
         /* Animations fade */
@@ -373,31 +382,28 @@
             }
 
             .step textarea,
-            .step input,
+            .step input[type="text"],
+            .step input[type="email"],
+            .step input[type="url"],
+            .step input[type="number"],
             .input-field {
                 font-size: 18px;
                 padding: 14px;
             }
 
             .step textarea::placeholder,
-            .step input::placeholder,
-            .input-field::placeholder {
+            .step input::placeholder {
                 font-size: 16px;
             }
 
             .form-btn {
-            		position: fixed;
+                position: fixed;
                 width: 52px;
                 height: 52px;
                 right: 16px;
                 bottom: 16px;
                 bottom: calc(32px + env(safe-area-inset-bottom));
                 z-index: 1000;
-            }
-
-            .arrow-icon {
-                width: 22px;
-                height: 22px;
             }
         }
     </style>
@@ -576,8 +582,8 @@
             <!-- Les autres étapes (2 à 14) restent identiques : copie/colle celles de ton code original -->
             <!-- ... -->
             <button type="button" class="form-btn" onclick="nextStep(); return false;">
-                <img src="https://cdn.prod.website-files.com/67d404ef725b4244f4b32ad1/6804f359eab9bf4963c33c15_1646214.svg"
-                    alt="Flèche suivante" class="arrow-icon" />
+                <span class="check-icon">✔</span>
+                <span class="arrow-icon">➔</span>
             </button>
         </form>
     </div>
