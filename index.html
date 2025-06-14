@@ -144,7 +144,7 @@
         #step-8 textarea,
         #step-9 textarea,
         #step-10 textarea {
-            min-height: 200px;
+            min-height: 60px;
         }
 
         .step textarea,
@@ -157,6 +157,8 @@
             outline: none;
             color: --blanc;
             border-radius: 8px;
+            overflow-y: hidden;
+            min-height: 60px;
             margin-bottom: 60px;
             resize: none;
         }
@@ -361,7 +363,8 @@
                 max-height: 50vh;
                 padding: 20px;
                 overflow-y: auto;
-                background-color: var(--bleu-electrique);
+                background-color: rgba(255,255,255,0.8);
+                backdrop-filter: blur(5px);
                 z-index: 10;
             }
 
@@ -760,13 +763,18 @@
                 });
                 nextButton.classList.toggle("active", valid);
             }
+            function autoResize(el){el.style.height="auto";el.style.height=el.scrollHeight+"px";}
             function attachInputListeners() {
                 steps.forEach(step => {
                     step.querySelectorAll("textarea, input").forEach(field => {
-                        field.addEventListener("input", updateButton);
+                        field.addEventListener("input", () => {
+                            if (field.tagName === "TEXTAREA") autoResize(field);
+                            updateButton();
+                        });
                         field.addEventListener("change", updateButton);
                     });
                 });
+                document.querySelectorAll("textarea").forEach(autoResize);
             }
             let skipAnimationSteps = false;
 
