@@ -330,13 +330,6 @@
         /* Responsive */
         @media screen and (max-width: 1024px) {
 
-            /* Masquer la vidéo */
-            .video-wrapper,
-            .video-overlay,
-            .video-seekbar {
-                display: none !important;
-            }
-
             html,
             body {
                 overflow-x: hidden;
@@ -387,6 +380,24 @@
             .arrow-icon {
                 width: 22px;
                 height: 22px;
+            }
+        }
+
+        /* Tablette : vidéo plein écran avec formulaire en overlay */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .video-wrapper {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .formulaire-questions {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(27, 27, 27, 0.6);
+                overflow-y: auto;
             }
         }
     </style>
@@ -574,7 +585,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             // Variables globales
-            const isDesktop = window.innerWidth > 1024;
+            const showVideo = window.innerWidth >= 768;
             const wrapper = document.querySelector(".video-wrapper");
             const playButton = document.getElementById("play-button");
             const steps = document.querySelectorAll(".step");
@@ -665,7 +676,7 @@
                     firstPlay: firstPlayFlags[index],
                     firstPlayFlags: [...firstPlayFlags],
                 });
-                if (!isDesktop) return;
+                if (!showVideo) return;
 
                 // RESET
                 document.querySelectorAll('.video').forEach(v => {
@@ -728,7 +739,7 @@
 
 
             // 3) Clique unique sur toute la zone vidéo (wrapper) pour play/pause
-            if (isDesktop) {
+            if (showVideo) {
                 // Clic direct sur la vidéo (déjà géré par setupVideo)
                 // Clic sur l'overlay
                 playButton.addEventListener("click", (e) => {
@@ -836,7 +847,7 @@ currentStep = nextIdx;
     nextEl.classList.add("fade-in");
     setTimeout(() => nextEl.classList.remove("fade-in"), 400);
 
-    if (isDesktop) setupVideo(currentStep);
+        if (showVideo) setupVideo(currentStep);
     focusFirst();
     updateButton();
   }, 400);
@@ -846,7 +857,7 @@ currentStep = nextIdx;
 
             // === Initialisation ===
             loadVideos();
-            if (isDesktop) setupVideo(0);
+            if (showVideo) setupVideo(0);
             wrapper.addEventListener('click', (e) => {
                 const vid = document.querySelector('.video.active');
                 if (!vid) return;
