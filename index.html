@@ -361,7 +361,7 @@
                 max-height: 50vh;
                 padding: 20px;
                 overflow-y: auto;
-                background-color: var(--bleu-electrique);
+                background-color: transparent;
                 z-index: 10;
             }
 
@@ -373,7 +373,9 @@
             .step input,
             .input-field {
                 font-size: 18px;
-                padding: 14px;
+                padding: 14px 14px 14px 14px;
+                width: 100%;
+                padding-right: 72px;
             }
 
             .step textarea::placeholder,
@@ -383,12 +385,12 @@
             }
 
             .form-btn {
-            		position: fixed;
+                position: absolute;
+                top: 50%;
+                right: 16px;
+                transform: translateY(-50%);
                 width: 52px;
                 height: 52px;
-                right: 16px;
-                bottom: 16px;
-                bottom: calc(32px + env(safe-area-inset-bottom));
                 z-index: 1000;
             }
 
@@ -590,6 +592,20 @@
             const progressBar = document.getElementById("progress-bar-devis");
             let currentStep = 0;
             let firstPlayFlags = []; // pour chaque vidéo, on rewind+unmute qu’une seule fois
+
+            function positionButton() {
+                if (window.innerWidth <= 1024) {
+                    const step = steps[currentStep];
+                    if (step && step !== nextButton.parentElement) {
+                        step.appendChild(nextButton);
+                    }
+                } else {
+                    const form = document.getElementById("mon-formulaire");
+                    if (form && nextButton.parentElement !== form) {
+                        form.appendChild(nextButton);
+                    }
+                }
+            }
 
             function bindClickHandlerTo(video) {
                 video.addEventListener('click', (event) => {
@@ -844,6 +860,7 @@ currentStep = nextIdx;
     setupVideo(currentStep);
     focusFirst();
     updateButton();
+    positionButton();
   }, 400);
 };
 
@@ -890,6 +907,7 @@ currentStep = nextIdx;
             attachInputListeners();
             updateButton();
             focusFirst();
+            positionButton();
         });
 
     </script>
