@@ -330,11 +330,15 @@
         /* Responsive */
         @media screen and (max-width: 1024px) {
 
-            /* Masquer la vidéo */
-            .video-wrapper,
+            /* Vidéo plein écran sur mobile/tablette */
+            .video-wrapper {
+                width: 100%;
+                height: 100vh;
+            }
+
             .video-overlay,
             .video-seekbar {
-                display: none !important;
+                display: flex;
             }
 
             html,
@@ -665,7 +669,6 @@
                     firstPlay: firstPlayFlags[index],
                     firstPlayFlags: [...firstPlayFlags],
                 });
-                if (!isDesktop) return;
 
                 // RESET
                 document.querySelectorAll('.video').forEach(v => {
@@ -728,15 +731,13 @@
 
 
             // 3) Clique unique sur toute la zone vidéo (wrapper) pour play/pause
-            if (isDesktop) {
-                // Clic direct sur la vidéo (déjà géré par setupVideo)
-                // Clic sur l'overlay
-                playButton.addEventListener("click", (e) => {
-                    e.stopPropagation(); // évite la propagation vers des parents
-                    const vid = document.querySelector(".video.active");
-                    if (vid) handleVideoClick(vid);
-                });
-            }
+            // Clic direct sur la vidéo (déjà géré par setupVideo)
+            // Clic sur l'overlay
+            playButton.addEventListener("click", (e) => {
+                e.stopPropagation(); // évite la propagation vers des parents
+                const vid = document.querySelector(".video.active");
+                if (vid) handleVideoClick(vid);
+            });
 
             // 4) Navigation des étapes
             function focusFirst() {
@@ -836,7 +837,7 @@ currentStep = nextIdx;
     nextEl.classList.add("fade-in");
     setTimeout(() => nextEl.classList.remove("fade-in"), 400);
 
-    if (isDesktop) setupVideo(currentStep);
+    setupVideo(currentStep);
     focusFirst();
     updateButton();
   }, 400);
@@ -846,7 +847,7 @@ currentStep = nextIdx;
 
             // === Initialisation ===
             loadVideos();
-            if (isDesktop) setupVideo(0);
+            setupVideo(0);
             wrapper.addEventListener('click', (e) => {
                 const vid = document.querySelector('.video.active');
                 if (!vid) return;
