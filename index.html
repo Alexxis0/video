@@ -155,7 +155,7 @@
             border: none;
             background: #f8f8f8;
             outline: none;
-            color: --blanc;
+            color: var(--blanc);
             border-radius: 8px;
             margin-bottom: 60px;
             resize: none;
@@ -175,7 +175,7 @@
             border: none;
             outline: none;
             background: #f8f8f8;
-            color: --blanc;
+            color: var(--blanc);
             border-radius: 8px;
             pointer-events: initial;
             margin-bottom: 40px;
@@ -205,7 +205,7 @@
             border-radius: 12px;
             padding: 16px 24px;
             font-size: 20px;
-            color: --blanc;
+            color: var(--blanc);
             transition: all 0.3s ease;
         }
 
@@ -385,6 +385,21 @@
             .step input,
             .input-field {
                 font-size: 25px;
+            }
+
+            /* Textareas styled like inputs */
+            .step textarea {
+                background: rgba(255, 255, 255, 0.6);
+                border-radius: 11px;
+                margin: 0 0 40px 0;
+                padding: 20px;
+                width: 95%;
+                min-height: 60px;
+                transition: min-height 0.3s ease;
+            }
+
+            .step textarea:focus {
+                min-height: 160px;
             }
 
             .input-field {
