@@ -379,12 +379,15 @@
 
             .step-title {
                 font-size: 22px;
+                color: white;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+                
             }
 
             .step textarea,
             .step input,
             .input-field {
-                font-size: 25px;
+                font-size: 22px;
                 background: rgba(255, 255, 255, 0.6);
                 margin-bottom: 0px;
             }
@@ -403,7 +406,8 @@
             #step-9 textarea,
             #step-10 textarea {
                 min-height: 0px;
-                height: 29px;
+                height: 26px;
+                transition: height 0.3s ease;
             }
 
             /* Agrandit la zone de texte au focus sur mobile/tablette */
@@ -413,7 +417,7 @@
             #step-8 textarea:focus,
             #step-9 textarea:focus,
             #step-10 textarea:focus {
-                height: 120px;
+                height: 150px;
             }
 
             .step textarea::placeholder,
@@ -428,7 +432,7 @@
 
             .form-btn {
                 position: absolute;
-                bottom: 43px;
+                bottom: 40px;
                 right: 10%;
                 transform: translateY(-50%);
                 width: 52px;
