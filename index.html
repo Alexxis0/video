@@ -129,7 +129,7 @@
         }
 
         .step-title {
-            width: 95%;
+            width: 100%;
             font-size: 26px;
             font-weight: bold;
             color: var(--blanc);
@@ -173,10 +173,11 @@
             padding: 20px;
             font-size: 24px;
             border: none;
-            background: #f8f8f8;
             outline: none;
+            background: #f8f8f8;
             color: --blanc;
             border-radius: 8px;
+            pointer-events: initial;
             margin-bottom: 40px;
         }
 
@@ -367,10 +368,10 @@
                 bottom: 0;
                 left: 50%;
                 transform: translateX(-50%);
-                width: 100%;
-                padding: 20px;
+                width: 92%;
                 background-color: transparent;
                 z-index: 2;
+                padding: 60px 10%;
                 height: auto;
                 max-width: 100%;
             }
@@ -382,13 +383,14 @@
             .step textarea,
             .step input,
             .input-field {
-                font-size: 18px;
-                padding: 14px;
+                font-size: 25px;
             }
 
             .input-field {
-                padding-right: 70px;
-                border-radius: 8px;
+                border-radius: 11px;
+                margin: 0px;
+                padding: 20px;
+                background: rgba(255, 255, 255, 0.6);
             }
 
             .step textarea::placeholder,
@@ -403,13 +405,13 @@
 
             .form-btn {
                 position: absolute;
-                top: 50%;
-                right: 24px;
+                bottom: 43px;
+                right: 10%;
                 transform: translateY(-50%);
-                width: 48px;
-                height: 48px;
+                width: 52px;
+                height: 52px;
                 z-index: 1000;
-                border-radius: 8px;
+                border-radius: 50%;
             }
 
             .arrow-icon {
