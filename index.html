@@ -7,7 +7,7 @@
     <title>Formulaire Nexmod – Plein écran</title>
     <style>
         /* Couleurs Nexmod */
-         :root {
+        :root {
             --bleu-nuit: #130c42;
             --bleu-electrique: white;
             --rose-violet: #e149ed;
@@ -330,11 +330,23 @@
         /* Responsive */
         @media screen and (max-width: 1024px) {
 
-            /* Masquer la vidéo */
-            .video-wrapper,
-            .video-overlay,
+            /* Afficher la vidéo en plein écran */
+            .video-wrapper {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: block;
+                z-index: 1;
+            }
+
+            .video-overlay {
+                display: flex;
+            }
+
             .video-seekbar {
-                display: none !important;
+                display: block;
             }
 
             html,
@@ -347,14 +359,17 @@
                 width: 100%;
                 height: 100dvh;
                 overflow-x: hidden;
-    						overflow-y: auto;
+                overflow-y: auto;
             }
 
             .formulaire-questions {
                 width: 100%;
                 height: 100dvh;
                 padding: 40px 20px;
-                overflow-y: auto;	
+                overflow-y: auto;
+                background-color: transparent;
+                position: relative;
+                z-index: 2;
             }
 
             .step-title {
@@ -375,7 +390,7 @@
             }
 
             .form-btn {
-            		position: fixed;
+                position: fixed;
                 width: 52px;
                 height: 52px;
                 right: 16px;
@@ -417,150 +432,163 @@
             <!-- Étapes (gardées telles quelles) -->
             <!-- Étape 1 -->
             <!-- Formulaire HTML Nexmod complet avec toutes les étapes à jour -->
-<!-- Chaque étape correspond à une seule question pour une expérience fluide -->
+            <!-- Chaque étape correspond à une seule question pour une expérience fluide -->
 
-<!-- Étape 1 -->
-<div class="step" id="step-1">
-  <h2 class="step-title">Quel est ton prénom et ton nom ?</h2>
-  <input type="text" name="nom_prenom" class="input-field" placeholder="Prénom & nom">
-</div>
+            <!-- Étape 1 -->
+            <div class="step" id="step-1">
+                <h2 class="step-title">Quel est ton prénom et ton nom ?</h2>
+                <input type="text" name="nom_prenom" class="input-field" placeholder="Prénom & nom">
+            </div>
 
-<!-- Étape 2 -->
-<div class="step" id="step-2" style="display: none;">
-  <h2 class="step-title">Quelle est ton adresse e-mail ?</h2>
-  <input type="email" name="email" class="input-field" placeholder="Ton e-mail">
-</div>
+            <!-- Étape 2 -->
+            <div class="step" id="step-2" style="display: none;">
+                <h2 class="step-title">Quelle est ton adresse e-mail ?</h2>
+                <input type="email" name="email" class="input-field" placeholder="Ton e-mail">
+            </div>
 
-<!-- Étape 3 -->
-<div class="step" id="step-3" style="display: none;">
-  <h2 class="step-title">Quel est le nom de ton entreprise ?</h2>
-  <input type="text" name="nom_entreprise" class="input-field" placeholder="Nom de l'entreprise">
-</div>
+            <!-- Étape 3 -->
+            <div class="step" id="step-3" style="display: none;">
+                <h2 class="step-title">Quel est le nom de ton entreprise ?</h2>
+                <input type="text" name="nom_entreprise" class="input-field" placeholder="Nom de l'entreprise">
+            </div>
 
-<!-- Étape 4 -->
-<div class="step" id="step-4" style="display: none;">
-  <h2 class="step-title">Ton entreprise a-t-elle un site web ?</h2>
-  <input type="url" name="site_entreprise" class="input-field" placeholder="https://www.ton-site.com (facultatif)">
-</div>
+            <!-- Étape 4 -->
+            <div class="step" id="step-4" style="display: none;">
+                <h2 class="step-title">Ton entreprise a-t-elle un site web ?</h2>
+                <input type="url" name="site_entreprise" class="input-field"
+                    placeholder="https://www.ton-site.com (facultatif)">
+            </div>
 
-<!-- Étape 5 -->
-<div class="step" id="step-5" style="display: none;">
-  <h2 class="step-title">Que fait ton entreprise ?</h2>
-  <textarea name="activite_entreprise" class="input-field" placeholder="Décris ton activité en une phrase"></textarea>
-</div>
+            <!-- Étape 5 -->
+            <div class="step" id="step-5" style="display: none;">
+                <h2 class="step-title">Que fait ton entreprise ?</h2>
+                <textarea name="activite_entreprise" class="input-field"
+                    placeholder="Décris ton activité en une phrase"></textarea>
+            </div>
 
-<!-- Étape 6 -->
-<div class="step" id="step-6" style="display: none;">
-  <h2 class="step-title">Quel est l’objectif de ta demande ?</h2>
-  <div class="checkbox-group">
-    <label><input type="checkbox" name="objectif" value="Modèle 3D pour e-commerce">Modèle 3D pour e-commerce</label>
-    <label><input type="checkbox" name="objectif" value="Visuels produit">Visuels pour produit</label>
-    <label><input type="checkbox" name="objectif" value="Animation produit">Animation produit</label>
-    <label><input type="checkbox" name="objectif" value="Démonstration technique">Démonstration technique</label>
-    <label><input type="checkbox" name="objectif" value="Réalité augmentée">Réalité augmentée</label>
-  </div>
-</div>
+            <!-- Étape 6 -->
+            <div class="step" id="step-6" style="display: none;">
+                <h2 class="step-title">Quel est l’objectif de ta demande ?</h2>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="objectif" value="Modèle 3D pour e-commerce">Modèle 3D pour
+                        e-commerce</label>
+                    <label><input type="checkbox" name="objectif" value="Visuels produit">Visuels pour produit</label>
+                    <label><input type="checkbox" name="objectif" value="Animation produit">Animation produit</label>
+                    <label><input type="checkbox" name="objectif" value="Démonstration technique">Démonstration
+                        technique</label>
+                    <label><input type="checkbox" name="objectif" value="Réalité augmentée">Réalité augmentée</label>
+                </div>
+            </div>
 
-<!-- Étape 7 -->
-<div class="step" id="step-7" style="display: none;">
-  <h2 class="step-title">À quel stade en es-tu ?</h2>
-  <div class="checkbox-group">
-    <label><input type="checkbox" name="stade" value="Idée générale">Idée générale</label>
-    <label><input type="checkbox" name="stade" value="En développement">Produit en développement</label>
-    <label><input type="checkbox" name="stade" value="Prêt à modéliser">Produit prêt à modéliser</label>
-  </div>
-</div>
+            <!-- Étape 7 -->
+            <div class="step" id="step-7" style="display: none;">
+                <h2 class="step-title">À quel stade en es-tu ?</h2>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="stade" value="Idée générale">Idée générale</label>
+                    <label><input type="checkbox" name="stade" value="En développement">Produit en développement</label>
+                    <label><input type="checkbox" name="stade" value="Prêt à modéliser">Produit prêt à modéliser</label>
+                </div>
+            </div>
 
-<!-- Étape 8 -->
-<div class="step" id="step-8" style="display: none;">
-  <h2 class="step-title">Quel est le produit à modéliser ?</h2>
-  <textarea name="produit_description" class="input-field" placeholder="Nom, usage, dimensions, matières..."></textarea>
-</div>
+            <!-- Étape 8 -->
+            <div class="step" id="step-8" style="display: none;">
+                <h2 class="step-title">Quel est le produit à modéliser ?</h2>
+                <textarea name="produit_description" class="input-field"
+                    placeholder="Nom, usage, dimensions, matières..."></textarea>
+            </div>
 
-<!-- Étape 9 -->
-<div class="step" id="step-9" style="display: none;">
-  <h2 class="step-title">Souhaites-tu des variantes ? (couleurs, textures, tailles...)</h2>
-  <textarea name="variantes" class="input-field" placeholder="Ex : 3 coloris, 2 textures... ou indique 'non'"></textarea>
-</div>
+            <!-- Étape 9 -->
+            <div class="step" id="step-9" style="display: none;">
+                <h2 class="step-title">Souhaites-tu des variantes ? (couleurs, textures, tailles...)</h2>
+                <textarea name="variantes" class="input-field"
+                    placeholder="Ex : 3 coloris, 2 textures... ou indique 'non'"></textarea>
+            </div>
 
-<!-- Étape 10 -->
-<div class="step" id="step-10" style="display: none;">
-  <h2 class="step-title">As-tu des éléments à nous transmettre pour modéliser ton produit ?</h2>
-  <textarea name="elements_a_transmettre" class="input-field" placeholder="Ex : croquis côté, fichier 3D, charte graphique, dossier Drive, etc."></textarea>
-  <input type="hidden" role="uploadcare-uploader" name="assets_model" data-multiple data-crop="free" data-images-only />
-</div>
+            <!-- Étape 10 -->
+            <div class="step" id="step-10" style="display: none;">
+                <h2 class="step-title">As-tu des éléments à nous transmettre pour modéliser ton produit ?</h2>
+                <textarea name="elements_a_transmettre" class="input-field"
+                    placeholder="Ex : croquis côté, fichier 3D, charte graphique, dossier Drive, etc."></textarea>
+                <input type="hidden" role="uploadcare-uploader" name="assets_model" data-multiple data-crop="free"
+                    data-images-only />
+            </div>
 
-<!-- Étape 11 -->
-<div class="step" id="step-11" style="display: none;">
-  <h2 class="step-title">Souhaites-tu une animation ?</h2>
-  <div class="checkbox-group">
-    <label><input type="checkbox" name="animation" value="Non">Non</label>
-    <label><input type="checkbox" name="animation" value="Oui">Oui</label>
-  </div>
-</div>
+            <!-- Étape 11 -->
+            <div class="step" id="step-11" style="display: none;">
+                <h2 class="step-title">Souhaites-tu une animation ?</h2>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="animation" value="Non">Non</label>
+                    <label><input type="checkbox" name="animation" value="Oui">Oui</label>
+                </div>
+            </div>
 
-<!-- Étape 12 -->
-<div class="step" id="step-12" style="display: none;">
-  <h2 class="step-title">Si oui, quelle durée doit-elle faire ?</h2>
-  <input type="text" name="duree_animation" class="input-field" placeholder="Ex : 10 sec, 30 sec, etc.">
-</div>
+            <!-- Étape 12 -->
+            <div class="step" id="step-12" style="display: none;">
+                <h2 class="step-title">Si oui, quelle durée doit-elle faire ?</h2>
+                <input type="text" name="duree_animation" class="input-field" placeholder="Ex : 10 sec, 30 sec, etc.">
+            </div>
 
-<!-- Étape 13 -->
-<div class="step" id="step-13" style="display: none;">
-  <h2 class="step-title">Souhaites-tu ajouter du son ou une musique ?</h2>
-  <div class="checkbox-group">
-    <label><input type="checkbox" name="animation_son" value="Non">Non</label>
-    <label><input type="checkbox" name="animation_son" value="Oui, j’ai une piste">Oui, j’ai une piste</label>
-    <label><input type="checkbox" name="animation_son" value="Oui, je veux que Nexmod choisisse">Oui, je veux que Nexmod choisisse</label>
-  </div>
-  <input type="hidden" role="uploadcare-uploader" name="fichier_animation" data-multiple data-crop="free" />
-</div>
+            <!-- Étape 13 -->
+            <div class="step" id="step-13" style="display: none;">
+                <h2 class="step-title">Souhaites-tu ajouter du son ou une musique ?</h2>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="animation_son" value="Non">Non</label>
+                    <label><input type="checkbox" name="animation_son" value="Oui, j’ai une piste">Oui, j’ai une
+                        piste</label>
+                    <label><input type="checkbox" name="animation_son" value="Oui, je veux que Nexmod choisisse">Oui, je
+                        veux que Nexmod choisisse</label>
+                </div>
+                <input type="hidden" role="uploadcare-uploader" name="fichier_animation" data-multiple
+                    data-crop="free" />
+            </div>
 
-<!-- Étape 14 -->
-<div class="step" id="step-14" style="display: none;">
-  <h2 class="step-title">Souhaites-tu que Nexmod intègre le modèle sur ton site ?</h2>
-  <div class="checkbox-group">
-    <label><input type="checkbox" name="integration" value="Non">Non, je souhaite uniquement les fichiers</label>
-    <label><input type="checkbox" name="integration" value="Oui">Oui, je veux que Nexmod intègre le modèle (ModelViewer, AR)</label>
-  </div>
-</div>
+            <!-- Étape 14 -->
+            <div class="step" id="step-14" style="display: none;">
+                <h2 class="step-title">Souhaites-tu que Nexmod intègre le modèle sur ton site ?</h2>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="integration" value="Non">Non, je souhaite uniquement les
+                        fichiers</label>
+                    <label><input type="checkbox" name="integration" value="Oui">Oui, je veux que Nexmod intègre le
+                        modèle (ModelViewer, AR)</label>
+                </div>
+            </div>
 
-<!-- Étape 15 -->
-<div class="step" id="step-15" style="display: none;">
-  <h2 class="step-title">As-tu une deadline ?</h2>
-  <input type="text" name="deadline" class="input-field" placeholder="Date ou délai souhaité">
-</div>
+            <!-- Étape 15 -->
+            <div class="step" id="step-15" style="display: none;">
+                <h2 class="step-title">As-tu une deadline ?</h2>
+                <input type="text" name="deadline" class="input-field" placeholder="Date ou délai souhaité">
+            </div>
 
-<!-- Étape 16 -->
-<div class="step" id="step-16" style="display: none;">
-  <h2 class="step-title">As-tu un budget estimé ?</h2>
-  <div class="checkbox-group">
-    <label><input type="checkbox" name="budget" value="<500€">Moins de 500 €</label>
-    <label><input type="checkbox" name="budget" value="500–1000€">500 – 1000 €</label>
-    <label><input type="checkbox" name="budget" value="1000–2000€">1000 – 2000 €</label>
-    <label><input type="checkbox" name="budget" value="2000–5000€">2000 – 5000 €</label>
-    <label><input type="checkbox" name="budget" value=">5000€+">Plus de 5000 €</label>
-  </div>
-</div>
+            <!-- Étape 16 -->
+            <div class="step" id="step-16" style="display: none;">
+                <h2 class="step-title">As-tu un budget estimé ?</h2>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="budget" value="500€">Moins de 500 €</label>
+                    <label><input type="checkbox" name="budget" value="500–1000€">500 – 1000 €</label>
+                    <label><input type="checkbox" name="budget" value="1000–2000€">1000 – 2000 €</label>
+                    <label><input type="checkbox" name="budget" value="2000–5000€">2000 – 5000 €</label>
+                    <label><input type="checkbox" name="budget" value=">5000€+">Plus de 5000 €</label>
+                </div>
+            </div>
 
-<!-- Étape 17 -->
-<div class="step" id="step-17" style="display: none;">
-  <h2 class="step-title">Comment as-tu connu Nexmod ?</h2>
-  <div class="checkbox-group">
-    <label><input type="checkbox" name="origine" value="Google">Google</label>
-    <label><input type="checkbox" name="origine" value="Réseaux sociaux">Réseaux sociaux</label>
-    <label><input type="checkbox" name="origine" value="Recommandation">Recommandation</label>
-    <label><input type="checkbox" name="origine" value="Autre">Autre</label>
-  </div>
-</div>
+            <!-- Étape 17 -->
+            <div class="step" id="step-17" style="display: none;">
+                <h2 class="step-title">Comment as-tu connu Nexmod ?</h2>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="origine" value="Google">Google</label>
+                    <label><input type="checkbox" name="origine" value="Réseaux sociaux">Réseaux sociaux</label>
+                    <label><input type="checkbox" name="origine" value="Recommandation">Recommandation</label>
+                    <label><input type="checkbox" name="origine" value="Autre">Autre</label>
+                </div>
+            </div>
 
-<!-- Étape 18 -->
-<div class="step message-final" id="step-18" style="display: none;">
-  <p class="message-final-text">
-    Merci <strong><span id="prenom-utilisateur">à toi</span></strong> 🙏<br>
-    Nous reviendrons vers toi sous 24h avec une proposition personnalisée.
-  </p>
-</div>
+            <!-- Étape 18 -->
+            <div class="step message-final" id="step-18" style="display: none;">
+                <p class="message-final-text">
+                    Merci <strong><span id="prenom-utilisateur">à toi</span></strong> 🙏<br>
+                    Nous reviendrons vers toi sous 24h avec une proposition personnalisée.
+                </p>
+            </div>
 
             <!-- Les autres étapes (2 à 14) restent identiques : copie/colle celles de ton code original -->
             <!-- ... -->
@@ -632,15 +660,17 @@
             // 1) Crée les <video> sans autoplay
             function loadVideos() {
                 const sources = [
-                    "1566080964_video copie.mp4",
-                    "1575020624_video copie.mp4",
                     "Download.mp4",
-                    "Sans titre copie.mov",
+                    "Download.mp4",
+                    "Download.mp4",
+                    "Download.mp4",
+                    "Download.mp4",
+                    "Download.mp4",
                     // ajoute ici toutes tes vidéos
                 ];
-                
-                
-                
+
+
+
                 sources.forEach((src, index) => {
                     const video = document.createElement("video");
                     video.classList.add("video");
@@ -765,82 +795,82 @@
             }
             let skipAnimationSteps = false;
 
-function getCheckboxValue(stepElement, name) {
-  const inputs = stepElement.querySelectorAll(`input[name='${name}']`);
-  for (const input of inputs) {
-    if (input.checked) return input.value;
-  }
-  return null;
-}
+            function getCheckboxValue(stepElement, name) {
+                const inputs = stepElement.querySelectorAll(`input[name='${name}']`);
+                for (const input of inputs) {
+                    if (input.checked) return input.value;
+                }
+                return null;
+            }
 
 
-     window.nextStep = () => {
-  // 1. Ne rien faire si le bouton n'est pas actif
-  if (!nextButton.classList.contains("active")) return;
+            window.nextStep = () => {
+                // 1. Ne rien faire si le bouton n'est pas actif
+                if (!nextButton.classList.contains("active")) return;
 
-  const currStepEl = steps[currentStep];
-  currStepEl.classList.add("fade-out");
+                const currStepEl = steps[currentStep];
+                currStepEl.classList.add("fade-out");
 
-  setTimeout(() => {
-    // 2. Cacher la step courante
-    currStepEl.style.display = "none";
-    currStepEl.classList.remove("fade-out");
+                setTimeout(() => {
+                    // 2. Cacher la step courante
+                    currStepEl.style.display = "none";
+                    currStepEl.classList.remove("fade-out");
 
-    // 3. Si on vient de l'étape 11 (index 10), gérer le skip des 12 & 13
-    if (currentStep === 10) {
-      const animValue = getCheckboxValue(currStepEl, "animation");
-      skipAnimationSteps = (animValue === "Non");
-    }
+                    // 3. Si on vient de l'étape 11 (index 10), gérer le skip des 12 & 13
+                    if (currentStep === 10) {
+                        const animValue = getCheckboxValue(currStepEl, "animation");
+                        skipAnimationSteps = (animValue === "Non");
+                    }
 
-    // 4. Calculer l'index de la prochaine étape
-   // 4. Calculer l'index de la prochaine étape
-let nextIdx = currentStep + 1;
-while (
-  skipAnimationSteps &&
-  (nextIdx === 11 || nextIdx === 12) &&
-  nextIdx < steps.length
-) {
-  nextIdx++;
-}
-currentStep = nextIdx;
+                    // 4. Calculer l'index de la prochaine étape
+                    // 4. Calculer l'index de la prochaine étape
+                    let nextIdx = currentStep + 1;
+                    while (
+                        skipAnimationSteps &&
+                        (nextIdx === 11 || nextIdx === 12) &&
+                        nextIdx < steps.length
+                    ) {
+                        nextIdx++;
+                    }
+                    currentStep = nextIdx;
 
 
-    // 5. Mettre à jour la barre de progression
-    const pct = Math.min((currentStep / (steps.length - 1)) * 100, 100);
-    progressBar.style.width = pct + "%";
+                    // 5. Mettre à jour la barre de progression
+                    const pct = Math.min((currentStep / (steps.length - 1)) * 100, 100);
+                    progressBar.style.width = pct + "%";
 
-    // 6. Si on arrive au dernier index (= étape 18 / message final)
-    if (currentStep === steps.length - 1) {
-      console.log("🚀 Étape 17 atteinte → soumission + affichage étape 18");
+                    // 6. Si on arrive au dernier index (= étape 18 / message final)
+                    if (currentStep === steps.length - 1) {
+                        console.log("🚀 Étape 17 atteinte → soumission + affichage étape 18");
 
-      // • Soumettre le formulaire
-      const form = document.getElementById("mon-formulaire");
-      if (form) form.submit();
+                        // • Soumettre le formulaire
+                        const form = document.getElementById("mon-formulaire");
+                        if (form) form.submit();
 
-      // • Afficher le message final
-      setTimeout(() => {
-        steps.forEach(s => (s.style.display = "none"));
-        const finalStep = document.getElementById("step-18");
-        if (finalStep) finalStep.style.display = "flex";
+                        // • Afficher le message final
+                        setTimeout(() => {
+                            steps.forEach(s => (s.style.display = "none"));
+                            const finalStep = document.getElementById("step-18");
+                            if (finalStep) finalStep.style.display = "flex";
 
-        // • Cacher le bouton
-        nextButton.style.display = "none";
-      }, 300);
+                            // • Cacher le bouton
+                            nextButton.style.display = "none";
+                        }, 300);
 
-      return; // on sort, pas de navigation classique
-    }
+                        return; // on sort, pas de navigation classique
+                    }
 
-    // 7. Sinon, afficher la step suivante normalement
-    const nextEl = steps[currentStep];
-    nextEl.style.display = "flex";
-    nextEl.classList.add("fade-in");
-    setTimeout(() => nextEl.classList.remove("fade-in"), 400);
+                    // 7. Sinon, afficher la step suivante normalement
+                    const nextEl = steps[currentStep];
+                    nextEl.style.display = "flex";
+                    nextEl.classList.add("fade-in");
+                    setTimeout(() => nextEl.classList.remove("fade-in"), 400);
 
-    if (isDesktop) setupVideo(currentStep);
-    focusFirst();
-    updateButton();
-  }, 400);
-};
+                    if (isDesktop) setupVideo(currentStep);
+                    focusFirst();
+                    updateButton();
+                }, 400);
+            };
 
 
 
