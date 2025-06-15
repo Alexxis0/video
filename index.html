@@ -664,7 +664,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             // Variables globales
-            const isDesktop = window.innerWidth > 1024;
             const wrapper = document.querySelector(".video-wrapper");
             const playButton = document.getElementById("play-button");
             const steps = document.querySelectorAll(".step");
@@ -925,7 +924,7 @@
                     nextEl.classList.add("fade-in");
                     setTimeout(() => nextEl.classList.remove("fade-in"), 400);
 
-                    if (isDesktop) setupVideo(currentStep);
+                    setupVideo(currentStep);
                     focusFirst();
                     updateButton();
                 }, 400);
