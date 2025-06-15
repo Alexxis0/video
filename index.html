@@ -708,7 +708,6 @@
                     firstPlay: firstPlayFlags[index],
                     firstPlayFlags: [...firstPlayFlags],
                 });
-                if (!isDesktop) return;
 
                 // RESET
                 document.querySelectorAll('.video').forEach(v => {
@@ -771,15 +770,13 @@
 
 
             // 3) Clique unique sur toute la zone vidéo (wrapper) pour play/pause
-            if (isDesktop) {
-                // Clic direct sur la vidéo (déjà géré par setupVideo)
-                // Clic sur l'overlay
-                playButton.addEventListener("click", (e) => {
-                    e.stopPropagation(); // évite la propagation vers des parents
-                    const vid = document.querySelector(".video.active");
-                    if (vid) handleVideoClick(vid);
-                });
-            }
+            // Clic direct sur la vidéo (déjà géré par setupVideo)
+            // Clic sur l'overlay
+            playButton.addEventListener("click", (e) => {
+                e.stopPropagation(); // évite la propagation vers des parents
+                const vid = document.querySelector(".video.active");
+                if (vid) handleVideoClick(vid);
+            });
 
             // 4) Navigation des étapes
             function focusFirst() {
@@ -889,7 +886,7 @@
 
             // === Initialisation ===
             loadVideos();
-            if (isDesktop) setupVideo(0);
+            setupVideo(0);
             wrapper.addEventListener('click', (e) => {
                 const vid = document.querySelector('.video.active');
                 if (!vid) return;
