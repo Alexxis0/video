@@ -406,6 +406,16 @@
                 height: 29px;
             }
 
+            /* Agrandit la zone de texte au focus sur mobile/tablette */
+            #step-3 textarea:focus,
+            #step-5 textarea:focus,
+            #step-7 textarea:focus,
+            #step-8 textarea:focus,
+            #step-9 textarea:focus,
+            #step-10 textarea:focus {
+                height: 120px;
+            }
+
             .step textarea::placeholder,
             .step input::placeholder,
             .input-field::placeholder {
@@ -425,6 +435,11 @@
                 height: 52px;
                 z-index: 1000;
                 border-radius: 50%;
+            }
+
+            .form-btn.active:hover,
+            .form-btn.active:active {
+                transform: translateY(-50%) scale(1.1);
             }
 
             .arrow-icon {
