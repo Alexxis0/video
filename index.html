@@ -137,16 +137,6 @@
             text-align: left;
         }
 
-        /* Agrandissement spécifique pour certaines étapes */
-        #step-3 textarea,
-        #step-5 textarea,
-        #step-7 textarea,
-        #step-8 textarea,
-        #step-9 textarea,
-        #step-10 textarea {
-            min-height: 200px;
-        }
-
         .step textarea,
         .step input[type="number"] {
             width: 95%;
@@ -157,8 +147,10 @@
             outline: none;
             color: --blanc;
             border-radius: 8px;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             resize: none;
+            min-height: 64px;
+            transition: min-height 0.3s ease;
         }
 
         .step textarea::placeholder,
@@ -385,6 +377,10 @@
             .step input,
             .input-field {
                 font-size: 25px;
+            }
+
+            .step textarea:focus {
+                min-height: 160px;
             }
 
             .input-field {
